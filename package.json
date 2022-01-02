@@ -25,3 +25,5 @@
 		"typescript": "^4.5.4"
 	}
 }
+// ts-node-dev: nodemon + ts-node
+// ts-node: node xxx 할때 단순히 ts파일 node하는 거라 보면된다.
