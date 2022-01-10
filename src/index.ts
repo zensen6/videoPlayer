@@ -1,4 +1,5 @@
 import express from 'express';
+import User from './schema/User';
 
 const app = express();
 app.get('/', (req, res) => {

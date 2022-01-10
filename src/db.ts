@@ -1,5 +1,4 @@
 import mongoose from 'mongoose';
-import { triggerAsyncId } from 'async_hooks';
 
 (async () =>
 	mongoose.connect('mongodb://127.0.0.1:27017/tsnode', {
