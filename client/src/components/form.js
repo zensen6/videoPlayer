@@ -1,7 +1,7 @@
 import { useRef, useEffect } from 'react';
 import axios from 'axios';
 
-const Form = ({ text, stateText }) => {
+const Form = ({ text, stateText, user, stateUser }) => {
 	const formRef = useRef();
 
 	useEffect(
@@ -9,8 +9,8 @@ const Form = ({ text, stateText }) => {
 			axios
 				.post('/api/test', { bod: { text } })
 				.then(function(res) {
-					alert('post success');
 					console.log(res.data);
+					changeUser(res.data.user);
 				})
 				.catch(function(error) {
 					alert('post fail');
@@ -22,13 +22,18 @@ const Form = ({ text, stateText }) => {
 	const handleText = (e) => {
 		e.preventDefault();
 		stateText(formRef.current.value);
-		console.log(text);
+		console.log('text:' + text);
+	};
+	const changeUser = (userInfo) => {
+		stateUser(userInfo);
 	};
 
 	return (
 		<div className="form-box">
-			<textarea ref={formRef} />
-			<input type="submit" onClick={handleText} />
+			<form method="post" action="/comments">
+				<textarea ref={formRef} />
+				<input type="submit" onClick={handleText} />
+			</form>
 		</div>
 	);
 };
