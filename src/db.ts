@@ -1,10 +1,12 @@
 import mongoose from 'mongoose';
 
-(async () =>
-	mongoose.connect('mongodb://127.0.0.1:27017/tsnode', {
+async function run(): Promise<void> {
+	await mongoose.connect('mongodb://127.0.0.1:27017/tsnode', {
 		useUnifiedTopology: true,
 		useNewUrlParser: true
-	}))();
+	});
+}
+run();
 
 const db = mongoose.connection;
 const handleOpen = () => console.log('OPEN');

@@ -1,9 +1,16 @@
 import express from 'express';
+import morgan from 'morgan';
 import User from './schema/User';
+import './db.ts';
 
 const app = express();
-app.get('/', (req, res) => {
-	res.send('123123');
+app.use(morgan('dev'));
+app.use(express.urlencoded({ extended: true }));
+
+app.get('/', async (req, res) => {
+	const userlist = await User.find({});
+	console.log(userlist);
+	return res.send('1');
 });
 
 const PORT = 5000;
