@@ -10,7 +10,6 @@ const Form = ({ text, stateText, user, stateUser }) => {
 				.post('/api/test', { bod: { text } })
 				.then(function(res) {
 					console.log(res.data);
-					changeUser(res.data.user);
 				})
 				.catch(function(error) {
 					alert('post fail');
@@ -23,9 +22,6 @@ const Form = ({ text, stateText, user, stateUser }) => {
 		e.preventDefault();
 		stateText(formRef.current.value);
 		console.log('text:' + text);
-	};
-	const changeUser = (userInfo) => {
-		stateUser(userInfo);
 	};
 
 	return (

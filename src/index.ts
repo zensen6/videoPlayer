@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import User from './schema/User';
 import path from 'path';
 import './db.ts';
+import signup from './user';
 
 const app = express();
 const BASE_URL = __dirname.substr(0, __dirname.length - 3);
@@ -23,11 +24,22 @@ app.get('*', (req, res) => {
 });
 
 app.post('/api/test', async (req, res) => {
-	const userlist = await User.find({});
-	console.log(userlist[0]);
+	//const userlist = await User.find({});
+	//console.log(userlist[0]);
 
 	console.log(req.body);
-	res.status(200).json({ success: true, user: userlist[0] });
+	res.status(200).json({ success: true });
+});
+
+app.post('/api/signup', async (req, res) => {
+	console.log('signup back');
+	console.log(req.body.email);
+	const message: any = await signup(req.body);
+	if (message === 'success') {
+		res.status(200).json({ success: true });
+	} else {
+		res.status(400).json({ error: message.error });
+	}
 });
 
 const PORT = 5000;
