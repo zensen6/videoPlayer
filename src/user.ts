@@ -28,7 +28,6 @@ export const signup: any = async (data: any) => {
 	let error_message: Error = { error: '' };
 	let signup_data: SignupData = data;
 	let error_: string;
-	console.log('here sign' + signup_data.email);
 	if (signup_data.password !== signup_data.password_confirm) {
 		error_ = 'password does not match with confirm one';
 		error_message.error = error_;
@@ -68,6 +67,5 @@ export const login: any = async (data: any) => {
 		error_message.error = error_;
 		return error_message;
 	}
-
 	return user;
 };

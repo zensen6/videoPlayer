@@ -3,6 +3,7 @@ import morgan from 'morgan';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import User from './schema/User';
+import Video from './schema/Video';
 import path from 'path';
 import 'dotenv/config';
 import './db.ts';
@@ -37,10 +38,11 @@ declare module 'express-session' {
 	}
 }
 
-app.get('/', async (req, res) => {
-	const userlist = await User.find({});
-	console.log(userlist);
-	return res.sendFile(path.join(BASE_URL, 'client/build/index.html'));
+app.get('/api/home', async (req, res) => {
+	const videoList = await Video.find({}).populate('owner');
+	console.log(videoList);
+	console.log(123);
+	return res.status(200).json(videoList);
 });
 
 app.get('*', (req, res) => {
@@ -94,11 +96,35 @@ app.post('/api/logout', (req, res) => {
 	});
 });
 
-const uploadVideo = (req: any, res: any) => {
+const uploadVideo = async (req: any, res: any) => {
 	console.log('uploaded video');
+
 	console.log(req.body);
+	console.log('---');
 	console.log(req.file);
-	res.status(200).json({ success: true });
+	const { user_id, title, description, author } = req.body;
+	const { path } = req.file;
+	try {
+		const video = new Video({
+			author,
+			title,
+			description,
+			fileUrl: path,
+			owner: user_id
+		});
+		await video.save();
+		const user = await User.findById(user_id);
+		if (user) {
+			user.videos.push(video._id);
+			await user.save();
+			res.status(200).json({ success: true });
+		} else {
+			res.status(400).json({ failure: true });
+		}
+	} catch (error) {
+		console.log(error);
+		res.status(400).json({ failure: true });
+	}
 };
 
 const videoRouter = express.Router();
