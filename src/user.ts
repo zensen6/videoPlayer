@@ -19,7 +19,12 @@ interface IUser {
 	age: number;
 }
 
-const signup: any = async (data: any) => {
+interface LoginData {
+	email: string;
+	password: string;
+}
+
+export const signup: any = async (data: any) => {
 	let error_message: Error = { error: '' };
 	let signup_data: SignupData = data;
 	let error_: string;
@@ -46,4 +51,23 @@ const signup: any = async (data: any) => {
 	return 'success';
 };
 
-export default signup;
+export const login: any = async (data: any) => {
+	let error_message: Error = { error: '' };
+	let login_data: LoginData = data;
+	let error_: string;
+	const user = await User.findOne({ email: login_data.email });
+	if (user) {
+		const userPWMatch = user.password === login_data.password;
+		if (!userPWMatch) {
+			error_ = 'pw does not match';
+			error_message.error = error_;
+			return error_message;
+		}
+	} else {
+		error_ = 'email does not exists ';
+		error_message.error = error_;
+		return error_message;
+	}
+
+	return user;
+};

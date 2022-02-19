@@ -1,9 +1,12 @@
 import express from 'express';
 import morgan from 'morgan';
+import session from 'express-session';
+import MongoStore from 'connect-mongo';
 import User from './schema/User';
 import path from 'path';
+import 'dotenv/config';
 import './db.ts';
-import signup from './user';
+import { signup, login } from './user';
 
 const app = express();
 const BASE_URL = __dirname.substr(0, __dirname.length - 3);
@@ -12,6 +15,22 @@ app.use(express.static(path.join(BASE_URL, 'client/build')));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+app.use(
+	session({
+		secret: process.env.SECRET!,
+		resave: false,
+		saveUninitialized: false,
+		store: MongoStore.create({ mongoUrl: process.env.DB_URL! })
+	})
+);
+
+declare module 'express-session' {
+	export interface SessionData {
+		user: { [key: string]: any };
+		loggedIn: boolean;
+	}
+}
 
 app.get('/', async (req, res) => {
 	const userlist = await User.find({});
@@ -40,6 +59,34 @@ app.post('/api/signup', async (req, res) => {
 	} else {
 		res.status(400).json({ error: message.error });
 	}
+});
+
+app.post('/api/login', async (req, res) => {
+	console.log('login back');
+	console.log(req.body.password);
+	const result: any = await login(req.body);
+	if (result.error === undefined) {
+		req.session.user = result;
+		req.session.loggedIn = true;
+		console.log(req.session.user);
+		res.status(200).json({
+			auth: true,
+			user_id: result._id,
+			message: 'You are logged in'
+		});
+	} else {
+		res.status(400).json({ error: result.error });
+	}
+});
+
+app.post('/api/logout', (req, res) => {
+	req.session.destroy((err) => {
+		if (err) {
+			res.status(400).json({ error: 'cannot logout' });
+		} else {
+			res.status(200).json({ success: 'logout done' });
+		}
+	});
 });
 
 const PORT = 5000;

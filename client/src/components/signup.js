@@ -32,6 +32,7 @@ const Signup = () => {
 			.post('/api/signup', data)
 			.then(function(res) {
 				console.log(res.data);
+				window.location = '/login';
 			})
 			.catch(function(error) {
 				console.log(error.response.data);
@@ -40,13 +41,19 @@ const Signup = () => {
 	};
 
 	return (
-		<div className="signup-box">
+		<div className="SubmitForm">
 			<form method="post">
-				<input type="email" name="email" placeholder="email" ref={emailRef} />
-				<input type="text" name="name" placeholder="name" ref={nameRef} />
-				<input type="password" name="password" placeholder="password" ref={pwRef} />
-				<input type="password" name="confirm-password" placeholder="password-confirm" ref={pwcRef} />
-				<input type="submit" onClick={signup_submit} />
+				<input className="SIGNINPUT" type="email" name="email" placeholder="email" ref={emailRef} />
+				<input className="SIGNINPUT" type="text" name="name" placeholder="name" ref={nameRef} />
+				<input className="SIGNINPUT" type="password" name="password" placeholder="password" ref={pwRef} />
+				<input
+					className="SIGNINPUT"
+					type="password"
+					name="confirm-password"
+					placeholder="password-confirm"
+					ref={pwcRef}
+				/>
+				<input className="SIGNINPUT" type="submit" onClick={signup_submit} />
 			</form>
 		</div>
 	);
