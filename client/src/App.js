@@ -4,6 +4,7 @@ import Header from './components/header';
 import Signup from './components/signup';
 import Login from './components/login';
 import Logout from './components/logout';
+import Upload from './components/upload';
 import { useState } from 'react';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './styles/app.scss';
@@ -22,6 +23,7 @@ function App() {
 				<Route path="/signup" element={<Signup />} />
 				<Route path="/login" element={<Login sessionStorage={sessionStorage} />} />
 				<Route path="/logout" element={<Logout sessionStorage={sessionStorage} />} />
+				<Route path="/upload" element={<Upload sessionStorage={sessionStorage} />} />
 				<Route
 					path="/"
 					element={<Form text={text} stateText={stateText} user={user} stateUser={stateUser} />}

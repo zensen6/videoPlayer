@@ -10,9 +10,16 @@ const Header = ({ loggedIn, sessionStorage }) => {
 							<input />
 						</form>
 					</div>
-					<Link to="/logout">
-						<span className="header_text">Logout</span>
-					</Link>
+					<div className="header_little">
+						<Link to="/logout">
+							<span className="header_text">Logout</span>
+						</Link>
+					</div>
+					<div className="header_little">
+						<Link to="/upload">
+							<span className="header_text">upload</span>
+						</Link>
+					</div>
 				</div>
 			) : (
 				<div className="log_sign">

@@ -7,6 +7,8 @@ import path from 'path';
 import 'dotenv/config';
 import './db.ts';
 import { signup, login } from './user';
+import cors from 'cors';
+import multer from 'multer';
 
 const app = express();
 const BASE_URL = __dirname.substr(0, __dirname.length - 3);
@@ -15,6 +17,8 @@ app.use(express.static(path.join(BASE_URL, 'client/build')));
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(cors());
+app.use('/uploads', express.static('uploads'));
 
 app.use(
 	session({
@@ -24,6 +28,7 @@ app.use(
 		store: MongoStore.create({ mongoUrl: process.env.DB_URL! })
 	})
 );
+const uploadVideos = multer({ dest: 'uploads/video' });
 
 declare module 'express-session' {
 	export interface SessionData {
@@ -88,6 +93,17 @@ app.post('/api/logout', (req, res) => {
 		}
 	});
 });
+
+const uploadVideo = (req: any, res: any) => {
+	console.log('uploaded video');
+	console.log(req.body);
+	console.log(req.file);
+	res.status(200).json({ success: true });
+};
+
+const videoRouter = express.Router();
+app.use('/api/video', videoRouter);
+videoRouter.route('/uploadVideo').post(uploadVideos.single('video'), uploadVideo);
 
 const PORT = 5000;
 app.listen(PORT, () => {
