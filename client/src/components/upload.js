@@ -4,6 +4,7 @@ import { useRef } from 'react';
 const Upload = ({ sessionStorage }) => {
 	const fileRef = useRef(null);
 	const titleRef = useRef(null);
+	const AuthorRef = useRef(null);
 	const desRef = useRef(null);
 	const uploadsubmit = (e) => {
 		e.preventDefault();
@@ -13,13 +14,8 @@ const Upload = ({ sessionStorage }) => {
 		frm.append('user_id', sessionStorage.getItem('loginId'));
 		frm.append('title', titleRef.current.value);
 		frm.append('description', desRef.current.value);
-		const data = {
-			user_id: sessionStorage.getItem('loginId'),
-			fileContent: frm,
-			title: titleRef.current.value,
-			description: desRef.current.value
-		};
-		console.log(data);
+		frm.append('author', AuthorRef.current.value);
+
 		axios
 			.post('/api/video/uploadVideo', frm, {
 				headers: {
@@ -28,12 +24,15 @@ const Upload = ({ sessionStorage }) => {
 			})
 			.then(function(res) {
 				console.log(res.data);
+				window.location = '/';
 			})
 			.catch(function(err) {
-				console.log(err.response.data.error);
+				console.log(err);
 			});
 	};
+	//
 
+	//
 	return (
 		<div className="SubmitForm">
 			<form method="post" enctype="multipart/form-data">
@@ -50,6 +49,14 @@ const Upload = ({ sessionStorage }) => {
 						ref={fileRef}
 					/>
 				</div>
+				<input
+					className="UPLOADINPUT"
+					placeholder="Author"
+					required
+					type="text"
+					name="author"
+					ref={AuthorRef}
+				/>
 				<input
 					className="UPLOADINPUT"
 					placeholder="Title"

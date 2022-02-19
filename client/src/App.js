@@ -6,6 +6,7 @@ import Login from './components/login';
 import Logout from './components/logout';
 import Upload from './components/upload';
 import { useState } from 'react';
+import axios from 'axios';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
 import './styles/app.scss';
 
@@ -15,6 +16,15 @@ function App() {
 	const [ user, stateUser ] = useState({});
 	const loggedIn = sessionStorage.getItem('loginId');
 	console.log(loggedIn);
+
+	axios
+		.get('/api/home')
+		.then((res) => {
+			console.log('received');
+			console.log(res.data);
+		})
+		.catch((err) => {});
+
 	return (
 		<div className="App">
 			<Header loggedIn={loggedIn} sessionStorage={sessionStorage} />

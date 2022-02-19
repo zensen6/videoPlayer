@@ -1,35 +1,30 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useEffect, useState } from 'react';
 import axios from 'axios';
+import Video_box from './video_box';
 
 const Form = ({ text, stateText, user, stateUser }) => {
-	const formRef = useRef();
+	const [ VideoList, stateVideoList ] = useState({});
 
-	useEffect(
-		() => {
-			axios
-				.post('/api/test', { bod: { text } })
-				.then(function(res) {
-					console.log(res.data);
-				})
-				.catch(function(error) {
-					alert('post fail');
-				});
-		},
-		[ text ]
-	);
-
-	const handleText = (e) => {
-		e.preventDefault();
-		stateText(formRef.current.value);
-		console.log('text:' + text);
-	};
-
+	useEffect(() => {
+		axios
+			.get('/api/home')
+			.then(function(res) {
+				console.log('received_home');
+				console.log(res.data[0]);
+				stateVideoList(res.data[0]);
+				console.log(VideoList);
+			})
+			.catch((err) => {});
+	}, []);
 	return (
-		<div className="form-box">
-			<form method="post" action="/comments">
-				<textarea ref={formRef} />
-				<input type="submit" onClick={handleText} />
-			</form>
+		<div>
+			<Video_box
+				fileUrl={VideoList.fileUrl}
+				author={VideoList.author}
+				owner={VideoList.owner}
+				title={VideoList.title}
+				description={VideoList.description}
+			/>
 		</div>
 	);
 };
