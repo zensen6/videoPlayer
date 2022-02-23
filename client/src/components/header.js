@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Router, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 const Header = ({ loggedIn, sessionStorage }) => {
 	return (

@@ -1,11 +1,9 @@
 import { useRef } from 'react';
-import { Redirect, Route, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const Login = ({ sessionStorage }) => {
 	const emailRef = useRef(null);
 	const pwRef = useRef(null);
-	const navigate = useNavigate();
 
 	const login_submit = async (e) => {
 		e.preventDefault();

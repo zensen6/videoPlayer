@@ -118,3 +118,27 @@
 	clip: rect(0, 0, 0, 0);
 	border: 0;
 }
+
+.video_container {
+	margin-top: 250px;
+	display: grid;
+	width: 90%;
+	height: 90%;
+	grid-template-columns: repeat(5, 20%);
+	grid-template-rows: repeat(5, 20%);
+}
+
+.each_video_box {
+	display: flex;
+	justify-content: center;
+	align-content: center;
+	width: 100%;
+	height: 100%;
+	background-color: aqua;
+}
+
+.each_video {
+	width: 90%;
+	height: 90%;
+	background-color: azure;
+}
