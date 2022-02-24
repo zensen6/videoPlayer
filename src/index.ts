@@ -150,7 +150,7 @@ const uploadVideo = async (req: any, res: any) => {
 			})
 			.screenshots({
 				// Will take screens at 20%, 40%, 60% and 80% of the video
-				count: 1,
+				count: 3,
 				folder: 'uploads/thumbnails',
 				size: '320x200',
 				// %b input basename ( filename w/o extension )
