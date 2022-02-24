@@ -6,6 +6,7 @@ interface Video {
 	fileUrl: string;
 	description?: string;
 	owner: Types.ObjectId;
+	thumbnail: string;
 }
 
 const schema = new Schema<Video>({
@@ -13,7 +14,8 @@ const schema = new Schema<Video>({
 	title: { type: String, required: true },
 	fileUrl: { type: String, required: true },
 	description: String,
-	owner: { type: 'ObjectId', ref: 'User' }
+	owner: { type: 'ObjectId', ref: 'User' },
+	thumbnail: String
 });
 
 const Video = model<Video>('Video', schema);

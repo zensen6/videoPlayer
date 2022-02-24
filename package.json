@@ -12,6 +12,8 @@
 	"dependencies": {
 		"@types/cors": "^2.8.12",
 		"@types/express-session": "^1.17.4",
+		"@types/ffmpeg": "^1.0.4",
+		"@types/fluent-ffmpeg": "^2.1.20",
 		"@types/multer": "^1.4.7",
 		"connect-mongo": "^4.6.0",
 		"cors": "^2.8.5",
@@ -19,6 +21,8 @@
 		"dotenv": "^10.0.0",
 		"express": "^4.17.2",
 		"express-session": "^1.17.2",
+		"ffmpeg": "0.0.4",
+		"fluent-ffmpeg": "^2.1.2",
 		"mongoose": "^5.13.8",
 		"morgan": "^1.10.0",
 		"multer": "^1.4.4",
