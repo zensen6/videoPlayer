@@ -2,6 +2,7 @@ import express from 'express';
 import morgan from 'morgan';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
+import ffmpeg from 'fluent-ffmpeg';
 import User from './schema/User';
 import Video from './schema/Video';
 import path from 'path';
@@ -42,6 +43,7 @@ app.get('/api/home', async (req, res) => {
 	const videoList = await Video.find({}).populate('owner');
 	console.log(videoList);
 	console.log(123);
+
 	return res.status(200).json(videoList);
 });
 
@@ -105,31 +107,75 @@ const uploadVideo = async (req: any, res: any) => {
 	const { user_id, title, description, author } = req.body;
 	const { path } = req.file;
 	try {
-		const video = new Video({
-			author,
-			title,
-			description,
-			fileUrl: path,
-			owner: user_id
+		// thumbnail
+		let thumbsFilePath = '';
+		let fileDuration: any;
+		ffmpeg.ffprobe(path, function(err, metadata) {
+			console.dir(metadata);
+			console.log(metadata.format.duration);
+			fileDuration = metadata.format.duration;
 		});
-		await video.save();
-		const user = await User.findById(user_id);
-		if (user) {
-			user.videos.push(video._id);
-			await user.save();
-			res.status(200).json({ success: true });
-		} else {
-			res.status(400).json({ failure: true });
-		}
+		ffmpeg(path)
+			.on('filenames', function(filenames) {
+				console.log('Will generate ' + filenames.join(', '));
+				thumbsFilePath = 'uploads/thumbnails/' + filenames[0];
+			})
+			.on('end', async function() {
+				console.log('Screenshots taken');
+				const video = new Video({
+					author,
+					title,
+					description,
+					fileUrl: path,
+					owner: user_id,
+					thumbnail: thumbsFilePath
+				});
+				await video.save();
+				const user = await User.findById(user_id);
+				if (user) {
+					user.videos.push(video._id);
+					await user.save();
+					return res.status(200).json({
+						success: true,
+						thumbsFilePath: thumbsFilePath,
+						fileDuration: fileDuration
+					});
+				} else {
+					return res.status(400).json({ failure: true });
+				}
+			})
+			.on('error', function(err) {
+				console.error(err);
+				return res.json({ success: false, err });
+			})
+			.screenshots({
+				// Will take screens at 20%, 40%, 60% and 80% of the video
+				count: 1,
+				folder: 'uploads/thumbnails',
+				size: '320x200',
+				// %b input basename ( filename w/o extension )
+				filename: 'thumbnail-%b.png'
+			});
+		//
 	} catch (error) {
 		console.log(error);
-		res.status(400).json({ failure: true });
+		return res.status(400).json({ failure: true });
 	}
 };
 
 const videoRouter = express.Router();
 app.use('/api/video', videoRouter);
 videoRouter.route('/uploadVideo').post(uploadVideos.single('video'), uploadVideo);
+
+app.post('/api/deleteVideo', async (req, res) => {
+	const { id } = req.body;
+	try {
+		await Video.findByIdAndRemove(id);
+		return res.status(200).json({ delete: true });
+	} catch (error) {
+		return res.status(400).json({ delete: false });
+	}
+});
 
 const PORT = 5000;
 app.listen(PORT, () => {
