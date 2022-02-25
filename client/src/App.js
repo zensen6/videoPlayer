@@ -17,6 +17,7 @@ function App() {
 	const [ VideoList, stateVideoList ] = useState([]);
 	const [ Micro, stateMicro ] = useState(false);
 	const [ microText, stateMicroText ] = useState('');
+	const [ viaMicro, stateViaMicro ] = useState(false);
 	const loggedIn = sessionStorage.getItem('loginId');
 	console.log(loggedIn);
 
@@ -36,6 +37,8 @@ function App() {
 				stateMicro={stateMicro}
 				microText={microText}
 				stateMicroText={stateMicroText}
+				viaMicro={viaMicro}
+				stateViaMicro={stateViaMicro}
 			/>
 			<Switch>
 				<Route path="/signup">
@@ -51,7 +54,7 @@ function App() {
 					<Upload sessionStorage={sessionStorage} />
 				</Route>
 				<Route path="/:id">
-					<Video_box VideoList={VideoList} />
+					<Video_box VideoList={VideoList} viaMicro={viaMicro} stateViaMicro={stateViaMicro} />
 				</Route>
 				<Route path="/">
 					<Home VideoList={VideoList} />

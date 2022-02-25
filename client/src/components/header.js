@@ -4,13 +4,22 @@ import { faPlay, faAngleLeft, faAngleRight, faPause, faReply, faMicrophone } fro
 import SpeechRecognition, { useSpeechRecognition } from 'react-speech-recognition';
 import { useEffect } from 'react';
 import axios from 'axios';
-const Header = ({ loggedIn, sessionStorage, Micro, stateMicro, microText, stateMicroText }) => {
+const Header = ({
+	loggedIn,
+	sessionStorage,
+	Micro,
+	stateMicro,
+	microText,
+	stateMicroText,
+	viaMicro,
+	stateViaMicro
+}) => {
 	const { transcript, listening, resetTranscript, browserSupportsSpeechRecognition } = useSpeechRecognition();
-	SpeechRecognition.startListening({ continuous: true });
 
 	useEffect(
 		() => {
 			if (!listening && transcript) {
+				console.log(transcript);
 				stateMicroText(transcript);
 			}
 		},
@@ -21,16 +30,17 @@ const Header = ({ loggedIn, sessionStorage, Micro, stateMicro, microText, stateM
 		console.log('micro');
 		if (Micro) {
 			stateMicro(false);
-			document.querySelector('.siri-bar').style.top = '-50px';
+			SpeechRecognition.stopListening();
+			document.querySelector('.siri-bar').style.top = '-200px';
 		} else {
 			stateMicro(true);
+			stateViaMicro(true);
 			document.querySelector('.siri-bar').style.top = '50px';
-			SpeechRecognition.startListening();
+			SpeechRecognition.startListening({ timeout: 6000 });
 			setTimeout(() => {
 				SpeechRecognition.stopListening();
 				resetTranscript();
-				stateMicro(false);
-				document.querySelector('.siri-bar').style.top = '-50px';
+				document.querySelector('.siri-bar').style.top = '-200px';
 			}, 6000);
 		}
 	};
@@ -42,6 +52,8 @@ const Header = ({ loggedIn, sessionStorage, Micro, stateMicro, microText, stateM
 			.post('/api/siri', text_data)
 			.then((res) => {
 				console.log(res.data);
+				stateViaMicro(true);
+				window.location = `/${res.data._id}`;
 			})
 			.catch((err) => {
 				console.log(err);
@@ -69,7 +81,17 @@ const Header = ({ loggedIn, sessionStorage, Micro, stateMicro, microText, stateM
 						</Link>
 					</div>
 					<div className="siri-bar">
-						<p>{transcript}</p>
+						<div className="siri-compo">
+							<div>
+								<div className="pulsating-circle" />
+							</div>
+							<div className="asking">
+								<p>듣고 싶은 노래 제목을 얘기해주세요</p>
+							</div>
+						</div>
+						<div className="transcript">
+							<p>{transcript}</p>
+						</div>
 					</div>
 				</div>
 			) : (
@@ -90,7 +112,17 @@ const Header = ({ loggedIn, sessionStorage, Micro, stateMicro, microText, stateM
 						</Link>
 					</div>
 					<div className="siri-bar">
-						<p>{transcript}</p>
+						<div className="siri-compo">
+							<div>
+								<div className="pulsating-circle" />
+							</div>
+							<div className="asking">
+								<p>듣고 싶은 노래 제목을 얘기해주세요</p>
+							</div>
+						</div>
+						<div className="transcript">
+							<p>{transcript}</p>
+						</div>
 					</div>
 				</div>
 			)}

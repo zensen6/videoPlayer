@@ -4,8 +4,9 @@ import axios from 'axios';
 
 let sessionStorage = window.sessionStorage;
 
-const Video_box = ({ VideoList }) => {
+const Video_box = ({ VideoList, viaMicro, stateViaMicro }) => {
 	//const { fileUrl, author, title, description, owner } = VideoList[0];
+	const videoRef = useRef();
 	const DeleteVideo = () => {
 		let deleteID = { id: video._id };
 		axios
@@ -27,9 +28,15 @@ const Video_box = ({ VideoList }) => {
 		return v._id == id;
 	})[0];
 	console.log(video);
+
+	const autoplay = () => {
+		videoRef.current.play();
+		stateViaMicro(false);
+	};
+
 	return video ? (
 		<div>
-			<video src={video.fileUrl} controls />
+			<video src={video.fileUrl} controls ref={videoRef} onLoadedMetadata={autoplay} />
 			<p>{video.author}</p>
 			<p>{video.title}</p>
 			{sessionStorage.getItem('loginId') === video.owner._id && (

@@ -187,12 +187,14 @@ app.post('/api/siri', async (req, res) => {
 	console.log(MatchingList);
 	if (MatchingList.title.length) {
 		const rand = Math.floor(Math.random() * MatchingList.title.length);
-		console.log(VideoList[rand]);
-		return res.status(200).json(VideoList[rand]);
+		console.log(MatchingList.title[rand]);
+		const return_video = await Video.findById(MatchingList.title[rand]);
+		return res.status(200).json(return_video);
 	} else if (MatchingList.author.length) {
 		const rand = Math.floor(Math.random() * MatchingList.author.length);
-		console.log(VideoList[rand]);
-		return res.status(200).json(VideoList[rand]);
+		console.log(MatchingList.author[rand]);
+		const return_video = await Video.findById(MatchingList.author[rand]);
+		return res.status(200).json(return_video);
 	}
 	return res.status(400).json({ failure: true });
 });

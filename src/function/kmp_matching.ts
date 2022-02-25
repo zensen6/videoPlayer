@@ -8,10 +8,10 @@ const KMP: any = (VideoList: any, Siri_message: string) => {
 		Candidate_Title: Array<string> = [];
 
 	VideoList.forEach((video: any) => {
-		if (kmp_match(video.author, Siri_message)) {
+		if (video.author.replace(' ', '').match(Siri_message)) {
 			Candidate_Author.push(video._id);
 		}
-		if (kmp_match(video.title, Siri_message)) {
+		if (video.title.replace(' ', '').match(Siri_message)) {
 			Candidate_Title.push(video._id);
 		}
 	});
