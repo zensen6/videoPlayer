@@ -5,6 +5,7 @@ import Login from './components/login';
 import Logout from './components/logout';
 import Upload from './components/upload';
 import Video_box from './components/video_box';
+import Dictaphone from './components/aaa';
 import { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Switch, Route, Link } from 'react-router-dom';
@@ -14,6 +15,8 @@ let sessionStorage = window.sessionStorage;
 function App() {
 	const [ user, stateUser ] = useState({});
 	const [ VideoList, stateVideoList ] = useState([]);
+	const [ Micro, stateMicro ] = useState(false);
+	const [ microText, stateMicroText ] = useState('');
 	const loggedIn = sessionStorage.getItem('loginId');
 	console.log(loggedIn);
 
@@ -24,10 +27,16 @@ function App() {
 		};
 		fetchData();
 	}, []);
-	console.log(VideoList.length);
 	return VideoList != [] ? (
 		<div className="App">
-			<Header loggedIn={loggedIn} sessionStorage={sessionStorage} />
+			<Header
+				loggedIn={loggedIn}
+				sessionStorage={sessionStorage}
+				Micro={Micro}
+				stateMicro={stateMicro}
+				microText={microText}
+				stateMicroText={stateMicroText}
+			/>
 			<Switch>
 				<Route path="/signup">
 					<Signup />

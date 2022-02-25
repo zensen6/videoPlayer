@@ -5,6 +5,7 @@ import MongoStore from 'connect-mongo';
 import ffmpeg from 'fluent-ffmpeg';
 import User from './schema/User';
 import Video from './schema/Video';
+import KMP from './function/kmp_matching';
 import path from 'path';
 import 'dotenv/config';
 import './db.ts';
@@ -175,6 +176,25 @@ app.post('/api/deleteVideo', async (req, res) => {
 	} catch (error) {
 		return res.status(400).json({ delete: false });
 	}
+});
+
+app.post('/api/siri', async (req, res) => {
+	const { text } = req.body;
+	const trimedString: String = text.replace(' ', '');
+	console.log(trimedString);
+	const VideoList = await Video.find({});
+	const MatchingList: any = KMP(VideoList, trimedString);
+	console.log(MatchingList);
+	if (MatchingList.title.length) {
+		const rand = Math.floor(Math.random() * MatchingList.title.length);
+		console.log(VideoList[rand]);
+		return res.status(200).json(VideoList[rand]);
+	} else if (MatchingList.author.length) {
+		const rand = Math.floor(Math.random() * MatchingList.author.length);
+		console.log(VideoList[rand]);
+		return res.status(200).json(VideoList[rand]);
+	}
+	return res.status(400).json({ failure: true });
 });
 
 const PORT = 5000;
