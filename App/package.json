@@ -1,0 +1,48 @@
+{
+	"name": "nodets",
+	"version": "1.0.0",
+	"description": "",
+	"main": "index.js",
+	"scripts": {
+		"test": "echo \"Error: no test specified\" && exit 1",
+		"start": "ts-node ./index.ts",
+		"build": "tsc",
+		"dev": "ts-node ./index.ts"
+	},
+	"author": "",
+	"engines": {
+		"ts-node": "10,7,0",
+		"npm": "6.14.15"
+	},
+	"license": "ISC",
+	"dependencies": {
+		"@types/cors": "^2.8.12",
+		"@types/express-session": "^1.17.4",
+		"@types/ffmpeg": "^1.0.4",
+		"@types/fluent-ffmpeg": "^2.1.20",
+		"@types/multer": "^1.4.7",
+		"aws-sdk": "^2.348.0",
+		"connect-mongo": "^4.6.0",
+		"cors": "^2.8.5",
+		"create-react-app": "^5.0.0",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.2",
+		"express-session": "^1.17.2",
+		"ffmpeg": "0.0.4",
+		"fluent-ffmpeg": "^2.1.2",
+		"mongoose": "^5.13.8",
+		"morgan": "^1.10.0",
+		"multer": "^1.4.4",
+		"multer-s3": "^2.10.0",
+		"ts-logger": "^0.1.5"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.13",
+		"@types/morgan": "^1.9.3",
+		"@types/node": "^17.0.6",
+		"nodemon": "^2.0.15",
+		"ts-node": "^10.7.0",
+		"ts-node-dev": "^1.1.8",
+		"typescript": "^4.5.4"
+	}
+}
